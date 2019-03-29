@@ -12,14 +12,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 
 public class MyService extends Service  {
 
@@ -127,9 +120,17 @@ public class MyService extends Service  {
             addressMessageBean.setSpeed(speed);
             addressMessageBean.setTime(System.currentTimeMillis() + "");
             addressMessageBeanList.add(addressMessageBean);
+            pushDataToServe();
         }
     }
 
+    private void pushDataToServe(){
+        for (int i=0;i<addressMessageBeanList.size();i++){
+            Log.e(TAG, "pushDataToServe: "+addressMessageBeanList.get(i).getTime());
+            addressMessageBeanList.remove(i);
+            addressMessageBeanList.notifyAll();
+        }
+    }
 
     @Override
     public void onDestroy() {
